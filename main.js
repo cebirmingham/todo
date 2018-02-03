@@ -26,8 +26,32 @@ todoForm.on('submit', function(event) {
         });
     }
 
-    
     event.preventDefault();
+});
+
+todoList.on('change','.todo-complete', function (event) {
+    var checkbox = $(event.target);
+    var checked = checkbox.is(":checked");
+    var checkboxId = checkbox.attr('id');
+    var endpoint = "";
+    console.log(checked);
+
+    if(checked) {  
+        endpoint = "https://rowan-todo-api.herokuapp.com/items/" + checkboxId + "/complete"
+    }
+    else{
+        endpoint = "https://rowan-todo-api.herokuapp.com/items/" + checkboxId + "/not-complete"
+    }
+    
+    $.ajax(endpoint, {
+        method: "post",
+        dataType: "json",
+        contentType: "application/json",
+        jsonp: false,
+        error: function () {
+            console.error("couldn't update todo :(");
+        }
+    });
 });
 
 
@@ -41,17 +65,16 @@ function loadTodoList(){
             todoList.html('<p>Todo list could not be loaded</p>');
         },
         success: function(items){
-            // console.log(items);
             var html = "<ul>";
             for (const item of items) {
                 console.log(item);
                 html += "<li>";
                 html += item.description + "  ";
                 if (item.complete === true){
-                    html += '<input type="checkbox" checked/>';
+                    html += '<input type="checkbox" checked class="todo-complete" id="'+item.id+'"/>';
                 }
                 else{
-                    html += '<input type="checkbox"/>';
+                    html += '<input type="checkbox" class="todo-complete" id="' + item.id +'"/>';
                 }
                 html += "</li>";
             }
