@@ -65,7 +65,7 @@ function loadTodoList(){
             todoList.html('<p>Todo list could not be loaded</p>');
         },
         success: function(items){
-            var html = "<ul>";
+            var html = "";
             for (const item of items) {
                 console.log(item);
                 html += "<li>";
@@ -78,7 +78,6 @@ function loadTodoList(){
                 }
                 html += "</li>";
             }
-            html +="</ul>"
             todoList.html(html);
         }
     });
